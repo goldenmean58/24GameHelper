@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 # @File     : 24Game.py
 # @Time     : Tue 24 Jul 2018 12:49:34 PM CST
-# @Author   : Lishuxiang
+# @Authand   : Lishuxiang
 # @E-mail   : lishuxiang@cug.edu.cn
-# @Function : find all solutions for 24 game
+# @Function : find all solutions fand 24 game
 import itertools #combinations and permutations
 import copy
 
@@ -41,7 +41,7 @@ def RPN2IN(exp):
 
 def calc(exp):
     #计算逆波兰表示法
-    #exp=list(1,2,3,4,'+','-','*') or list (1,2,'+',3,'-',4,'*')
+    #exp=list(1,2,3,4,'+','-','*') and list (1,2,'+',3,'-',4,'*')
     stack=list()
     for iter in exp:
         stack.append(iter)
@@ -70,7 +70,7 @@ def calc(exp):
                 return False
     return stack.pop()
 
-def func(list_nums,target):
+def func(list_nums,target,dev):
     solutions=list()
     if len(list_nums) == 0 :
         return False
@@ -96,7 +96,7 @@ def func(list_nums,target):
             for iter3 in iter2:
                 exp1.append(iter3) #exp1=list(1,2,3,4,'+','-','*')
             ret=calc(exp1)
-            if ret==target:
+            if ret<=target+dev and ret>=target-dev:
                 solutions.append(RPN2IN(exp1))
         #second situation: one symbol in the third place of the exp two in the last.
         for iter2 in symbol:
@@ -105,7 +105,7 @@ def func(list_nums,target):
             exp1.append(iter2[1])
             exp1.append(iter2[2])
             ret=calc(exp1)
-            if ret==target:
+            if ret<=target+dev and ret>=target-dev:
                 solutions.append(RPN2IN(exp1))
         #third situation: two symbols in the third place and one in the last
         for iter2 in symbol:
@@ -114,7 +114,7 @@ def func(list_nums,target):
             exp1.insert(3,iter2[1])
             exp1.append(iter2[2])
             ret=calc(exp1)
-            if ret==target:
+            if ret<=target+dev and ret>=target-dev:
                 solutions.append(RPN2IN(exp1))
         #forth situation: one symbol in the second place and two in the last
         for iter2 in symbol:
@@ -123,7 +123,7 @@ def func(list_nums,target):
             exp1.append(iter2[1]);
             exp1.append(iter2[2]);
             ret=calc(exp1)
-            if ret==target:
+            if ret<=target+dev and ret>=target-dev:
                 solutions.append(RPN2IN(exp1))
         #fifth situation: one in the second, one in the third and one in the last
         for iter2 in symbol:
@@ -132,13 +132,14 @@ def func(list_nums,target):
             exp1.insert(4,iter2[1])
             exp1.append(iter2[2])
             ret=calc(exp1)
-            if ret==target:
+            if ret<=target+dev and ret>=target-dev:
                 solutions.append(RPN2IN(exp1))
     return solutions
 
+#a=calc([8,3,8,3,'/','-','/'])
 while(True):
     base_num=eval(input(("请输入四个由逗号隔开的正整数(1<=N<=13):")))
-    ret=func(base_num,24)
+    ret=func(base_num,24,0.0000001)
     for iter in ret:
         print(iter[1:-1])
     print('共找到 %d 种解法'%len(ret))
